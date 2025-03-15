@@ -1,0 +1,52 @@
+// Ruta: WebContent/index.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bienvenido al Restaurante</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('images/fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 50px;
+        }
+        h1 {
+            color: #343a40;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <img src="images/logo.png" alt="Logo del Restaurante" class="logo">
+    <h1>Bienvenido al Sistema del Restaurante</h1>
+    <div class="button-container">
+        <a href="usuarios" class="button">Ver Usuarios</a>
+        <a href="clientes" class="button">Ver Clientes</a>
+        <a href="mesas" class="button">Ver Mesas</a>
+        <a href="productos" class="button">Ver Productos</a>
+    </div>
+</body>
+</html>

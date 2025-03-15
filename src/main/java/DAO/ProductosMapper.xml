@@ -1,0 +1,21 @@
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="DAO.ProductosMapper">
+ 
+ 	<resultMap id="ProductosMap" type="models.Produtos" >
+ 		<id column="id_Productos" property="ProductosID"/>
+ 		<result column="nombre" property="Nombre"/>
+ 		<result column="Preciol" property="Precio"/>
+ 		<result column="id_Categoria" property="CategoriaID"/>
+ 	</resultMap>
+ 
+ 	<select id="listarProductos" resultMap="ProductosMap">
+ 		SELECT ProductosID, Nombre, Precio, CategoriaID
+ 		FROM Productos
+ 	</select>
+ 	
+ </mapper>
