@@ -1,0 +1,141 @@
+-- Creación de la base de datos
+CREATE DATABASE RestauranteDB;
+GO
+
+USE RestauranteDB;
+GO
+
+-- Tabla de Usuarios
+CREATE TABLE Usuarios (
+    UsuarioID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Correo VARCHAR(100) UNIQUE,
+    Contraseña VARCHAR(255),
+    Rol VARCHAR(50) -- Administrador, Mesero, Cocinero
+);
+
+-- Tabla de Clientes
+CREATE TABLE Clientes (
+    ClienteID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Telefono VARCHAR(15),
+    Correo VARCHAR(100) UNIQUE NULL
+);
+
+-- Tabla de Mesas
+CREATE TABLE Mesas (
+    MesaID INT IDENTITY(1,1) PRIMARY KEY,
+    NumeroMesa INT UNIQUE,
+    Capacidad INT,
+    Estado VARCHAR(20) -- Disponible, Ocupada, Reservada
+);
+
+-- Tabla de Categorías de Productos
+CREATE TABLE Categorias (
+    CategoriaID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100)
+);
+
+-- Tabla de Productos
+CREATE TABLE Productos (
+    ProductoID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Precio DECIMAL(10,2),
+    CategoriaID INT,
+    FOREIGN KEY (CategoriaID) REFERENCES Categorias(CategoriaID)
+);
+
+-- Tabla de Pedidos
+CREATE TABLE Pedidos (
+    PedidoID INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteID INT NULL,
+    MesaID INT,
+    UsuarioID INT,
+    FechaHora DATETIME DEFAULT GETDATE(),
+    Estado VARCHAR(50), -- Pendiente, En preparación, Servido, Pagado
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID),
+    FOREIGN KEY (MesaID) REFERENCES Mesas(MesaID),
+    FOREIGN KEY (UsuarioID) REFERENCES Usuarios(UsuarioID)
+);
+
+-- Tabla de Detalle de Pedidos
+CREATE TABLE DetallePedidos (
+    DetalleID INT IDENTITY(1,1) PRIMARY KEY,
+    PedidoID INT,
+    ProductoID INT,
+    Cantidad INT,
+    Subtotal DECIMAL(10,2),
+    FOREIGN KEY (PedidoID) REFERENCES Pedidos(PedidoID),
+    FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
+);
+
+-- Tabla de Proveedores
+CREATE TABLE Proveedores (
+    ProveedorID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Telefono VARCHAR(15),
+    Correo VARCHAR(100) UNIQUE NULL
+);
+
+-- Tabla de Inventario
+CREATE TABLE Inventario (
+    InventarioID INT IDENTITY(1,1) PRIMARY KEY,
+    ProductoID INT,
+    Cantidad INT,
+    FechaActualizacion DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
+);
+
+-- Tabla de Reservaciones
+CREATE TABLE Reservaciones (
+    ReservacionID INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteID INT,
+    MesaID INT,
+    FechaHora DATETIME,
+    Estado VARCHAR(50), -- Confirmada, Cancelada, Pendiente
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID),
+    FOREIGN KEY (MesaID) REFERENCES Mesas(MesaID)
+);
+
+-- Insertar registros de prueba
+INSERT INTO Usuarios (Nombre, Correo, Contraseña, Rol) VALUES
+('Admin', 'admin@restaurante.com', 'admin123', 'Administrador'),
+('Carlos Mesero', 'carlos@restaurante.com', 'mesero123', 'Mesero');
+
+INSERT INTO Clientes (Nombre, Telefono, Correo) VALUES
+('Juan Pérez', '987654321', 'juan.perez@gmail.com'),
+('Ana López', '912345678', NULL);
+
+INSERT INTO Mesas (NumeroMesa, Capacidad, Estado) VALUES
+(1, 4, 'Disponible'),
+(2, 2, 'Ocupada');
+
+INSERT INTO Categorias (Nombre) VALUES
+('Entradas'),
+('Platos Fuertes'),
+('Bebidas');
+
+INSERT INTO Productos (Nombre, Precio, CategoriaID) VALUES
+('Ceviche', 25.00, 1),
+('Lomo Saltado', 35.00, 2),
+('Chicha Morada', 8.00, 3);
+
+INSERT INTO Pedidos (ClienteID, MesaID, UsuarioID, Estado) VALUES
+(1, 1, 2, 'Pendiente');
+
+INSERT INTO DetallePedidos (PedidoID, ProductoID, Cantidad, Subtotal) VALUES
+(1, 2, 1, 35.00),
+(1, 3, 2, 16.00);
+
+INSERT INTO Proveedores (Nombre, Telefono, Correo) VALUES
+('Distribuidora San Jorge', '987654321', 'sanjorge@proveedores.com'),
+('Bebidas y Licores S.A.', '912345678', 'bebidas@proveedores.com');
+
+INSERT INTO Inventario (ProductoID, Cantidad) VALUES
+(1, 50),
+(2, 30),
+(3, 100);
+
+INSERT INTO Reservaciones (ClienteID, MesaID, FechaHora, Estado) VALUES
+(1, 1, '2025-03-01 19:00:00', 'Confirmada'),
+(2, 2, '2025-03-02 20:30:00', 'Pendiente');
